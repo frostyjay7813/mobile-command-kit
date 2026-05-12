@@ -1,0 +1,17 @@
+{
+  "name": "@mobile-command-kit/admin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "tsc --project tsconfig.json --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "next": "^16.0.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@mobile-command-kit/domain": "workspace:*"
+  }
+}

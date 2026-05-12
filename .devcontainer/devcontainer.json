@@ -1,0 +1,29 @@
+{
+  "name": "mobile-command-kit",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "corepack enable && pnpm install",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "forwardPorts": [3000, 4000, 8081],
+  "portsAttributes": {
+    "3000": {
+      "label": "Admin"
+    },
+    "4000": {
+      "label": "API"
+    },
+    "8081": {
+      "label": "Expo"
+    }
+  }
+}

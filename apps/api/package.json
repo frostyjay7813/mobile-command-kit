@@ -1,0 +1,20 @@
+{
+  "name": "@mobile-command-kit/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsx watch src/server.ts",
+    "lint": "tsc --project tsconfig.json --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "fastify": "^5.6.1",
+    "zod": "^4.1.12",
+    "@mobile-command-kit/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  }
+}

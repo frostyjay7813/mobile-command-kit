@@ -1,0 +1,21 @@
+{
+  "name": "mobile-command-kit",
+  "private": true,
+  "packageManager": "pnpm@10.22.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:api": "pnpm --filter @mobile-command-kit/api dev",
+    "dev:admin": "pnpm --filter @mobile-command-kit/admin dev",
+    "dev:mobile": "pnpm --filter @mobile-command-kit/mobile dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "turbo": "^2.5.8",
+    "typescript": "^5.9.3"
+  }
+}
