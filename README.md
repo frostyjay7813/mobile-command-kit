@@ -1,12 +1,33 @@
 # Mobile Command Kit
 
-Retail incident command prototype built as a TypeScript monorepo.
+Multi-domain incident command prototype built as a TypeScript monorepo.
+
+## Product direction
+
+Mobile Command Kit is an incident-command platform core that can be applied across different business contexts (retail, SaaS operations, logistics, and more).
+
+### Platform core (intended to remain domain-neutral)
+
+- incident lifecycle and severity/state handling
+- governed action execution
+- approval routing by role
+- tenant policy controls
+- audit trail recording
+
+### Scenario templates (intended to vary by domain)
+
+- seeded incidents and timeline narratives
+- integration posture and operational copy
+- role labels and workflow emphasis
+- dashboard wording and runbook context
+
+The current seed data and UI copy are still primarily retail-oriented and should be treated as the first scenario template, not the product boundary.
 
 ## Workspace layout
 
-- `apps/mobile`: Expo React Native mobile command view for store and district operators
+- `apps/mobile`: Expo React Native mobile command view for frontline operators
 - `apps/admin`: Next.js admin console for policy, audit, and integration posture
-- `apps/api`: Fastify backend serving retail incident state and governed actions
+- `apps/api`: Fastify backend serving incident state and governed actions
 - `packages/domain`: shared domain schemas and types
 - `packages/config`: shared config values
 
