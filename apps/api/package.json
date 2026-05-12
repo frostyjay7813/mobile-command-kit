@@ -6,7 +6,8 @@
     "build": "tsc --project tsconfig.json",
     "dev": "tsx watch src/server.ts",
     "lint": "tsc --project tsconfig.json --noEmit",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",
@@ -15,6 +16,7 @@
     "@mobile-command-kit/domain": "workspace:*"
   },
   "devDependencies": {
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "vitest": "^3.2.4"
   }
 }
