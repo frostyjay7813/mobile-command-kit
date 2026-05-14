@@ -126,3 +126,25 @@ export const auditEventSchema = z.object({
   happenedAt: z.string().datetime()
 });
 export type AuditEvent = z.infer<typeof auditEventSchema>;
+
+
+export const scenarioMetadataSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  description: z.string()
+});
+export type ScenarioMetadata = z.infer<typeof scenarioMetadataSchema>;
+
+export const scenarioSeedSchema = z.object({
+  incidents: z.array(incidentDetailSchema),
+  integrations: z.array(integrationConnectionSchema),
+  policies: z.array(tenantPolicySchema),
+  auditEvents: z.array(auditEventSchema).default([])
+});
+export type ScenarioSeed = z.infer<typeof scenarioSeedSchema>;
+
+export const scenarioPackSchema = z.object({
+  metadata: scenarioMetadataSchema,
+  seed: scenarioSeedSchema
+});
+export type ScenarioPack = z.infer<typeof scenarioPackSchema>;
