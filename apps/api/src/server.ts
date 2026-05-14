@@ -2,6 +2,7 @@ import cors from "@fastify/cors";
 import Fastify from "fastify";
 import { approvalDecisionRequestSchema, commandExecutionRequestSchema, tenantPolicySchema } from "@mobile-command-kit/domain";
 import { requireActorSession } from "./lib/auth.js";
+import { getActiveScenario } from "./lib/scenario.js";
 import {
   executeAction,
   getIncidentById,
@@ -13,23 +14,29 @@ import {
   saveTenantPolicy
 } from "./mock-data.js";
 
-const app = Fastify({
-  logger: true
-});
+export function buildApp() {
+  const app = Fastify({
+    logger: true
+  });
 
-await app.register(cors, {
-  origin: true
-});
+  void app.register(cors, {
+    origin: true
+  });
 
-app.get("/health", async () => ({
-  status: "ok"
-}));
+  app.get("/health", async () => ({
+    status: "ok"
+  }));
 
-app.get("/api/incidents", async () => ({
-  incidents: await listIncidents()
-}));
+  app.get("/api/scenario", async (request) => {
+    const query = request.query as { id?: string };
+    return getActiveScenario(query.id);
+  });
 
-app.get("/api/incidents/:incidentId", async (request, reply) => {
+  app.get("/api/incidents", async () => ({
+    incidents: await listIncidents()
+  }));
+
+  app.get("/api/incidents/:incidentId", async (request, reply) => {
   const { incidentId } = request.params as { incidentId: string };
   const incident = await getIncidentById(incidentId);
 
@@ -38,13 +45,13 @@ app.get("/api/incidents/:incidentId", async (request, reply) => {
   }
 
   return { incident };
-});
+  });
 
-app.get("/api/integrations", async () => ({
-  integrations: await listIntegrations()
-}));
+  app.get("/api/integrations", async () => ({
+    integrations: await listIntegrations()
+  }));
 
-app.get("/api/policies/current", { preHandler: requireActorSession }, async (request, reply) => {
+  app.get("/api/policies/current", { preHandler: requireActorSession }, async (request, reply) => {
   const policy = await getTenantPolicy(request.actorSession!.tenantId);
 
   if (!policy) {
@@ -52,9 +59,9 @@ app.get("/api/policies/current", { preHandler: requireActorSession }, async (req
   }
 
   return { policy };
-});
+  });
 
-app.put("/api/policies/current", { preHandler: requireActorSession }, async (request, reply) => {
+  app.put("/api/policies/current", { preHandler: requireActorSession }, async (request, reply) => {
   const parsed = tenantPolicySchema.safeParse({
     ...(request.body as Record<string, unknown>),
     tenantId: request.actorSession!.tenantId
@@ -68,14 +75,14 @@ app.put("/api/policies/current", { preHandler: requireActorSession }, async (req
   }
 
   return { policy: await saveTenantPolicy(parsed.data) };
-});
+  });
 
-app.get("/api/incidents/:incidentId/audit", async (request) => {
+  app.get("/api/incidents/:incidentId/audit", async (request) => {
   const { incidentId } = request.params as { incidentId: string };
   return { auditEvents: await listAuditEvents(incidentId) };
-});
+  });
 
-app.post("/api/incidents/:incidentId/approvals", { preHandler: requireActorSession }, async (request, reply) => {
+  app.post("/api/incidents/:incidentId/approvals", { preHandler: requireActorSession }, async (request, reply) => {
   const { incidentId } = request.params as { incidentId: string };
   const parsedBody = approvalDecisionRequestSchema.safeParse(request.body);
 
@@ -93,9 +100,9 @@ app.post("/api/incidents/:incidentId/approvals", { preHandler: requireActorSessi
   }
 
   return { incident };
-});
+  });
 
-app.post("/api/incidents/:incidentId/actions", { preHandler: requireActorSession }, async (request, reply) => {
+  app.post("/api/incidents/:incidentId/actions", { preHandler: requireActorSession }, async (request, reply) => {
   const { incidentId } = request.params as { incidentId: string };
   const parsedBody = commandExecutionRequestSchema.safeParse(request.body);
 
@@ -113,9 +120,15 @@ app.post("/api/incidents/:incidentId/actions", { preHandler: requireActorSession
   }
 
   return { result };
-});
+  });
 
-await app.listen({
-  host: "0.0.0.0",
-  port: 4000
-});
+  return app;
+}
+
+if (import.meta.main) {
+  const app = buildApp();
+  await app.listen({
+    host: "0.0.0.0",
+    port: 4000
+  });
+}
