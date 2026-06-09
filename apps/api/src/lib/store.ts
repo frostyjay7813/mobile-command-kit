@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AuditEvent, IncidentDetail, IntegrationConnection, IncidentSummary, TenantPolicy } from "@mobile-command-kit/domain";
 import { auditEventSchema, incidentDetailSchema, integrationConnectionSchema, tenantPolicySchema } from "@mobile-command-kit/domain";
-import { seedIncidents, seedIntegrations, seedPolicies } from "./bootstrap-data.js";
+import { getActiveScenarioId, resolveScenarioPack, seedPolicies } from "./bootstrap-data.js";
 
 type StoreShape = {
   incidents: IncidentDetail[];
@@ -37,10 +37,11 @@ async function readStore(): Promise<StoreShape> {
       auditEvents: (parsed.auditEvents ?? []).map((event) => auditEventSchema.parse(event))
     };
   } catch {
+    const pack = resolveScenarioPack(getActiveScenarioId());
     const seeded: StoreShape = {
-      incidents: seedIncidents,
-      integrations: seedIntegrations,
-      policies: seedPolicies,
+      incidents: pack.seed.incidents,
+      integrations: pack.seed.integrations,
+      policies: pack.seed.policies,
       auditEvents: []
     };
 

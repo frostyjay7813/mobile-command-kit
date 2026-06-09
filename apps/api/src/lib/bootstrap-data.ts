@@ -167,3 +167,31 @@ export const seedPolicies: TenantPolicy[] = [
     restrictedSeverities: ["sev1", "sev2"]
   })
 ];
+
+export type ScenarioSeed = {
+  incidents: IncidentDetail[];
+  integrations: IntegrationConnection[];
+  policies: TenantPolicy[];
+};
+
+export type ScenarioPack = {
+  id: string;
+  seed: ScenarioSeed;
+};
+
+const defaultScenarioPack: ScenarioPack = {
+  id: "default",
+  seed: {
+    incidents: seedIncidents,
+    integrations: seedIntegrations,
+    policies: seedPolicies
+  }
+};
+
+export function getActiveScenarioId(): string {
+  return process.env.MOBILE_COMMAND_KIT_SCENARIO_ID ?? defaultScenarioPack.id;
+}
+
+export function resolveScenarioPack(_scenarioId: string): ScenarioPack {
+  return defaultScenarioPack;
+}
